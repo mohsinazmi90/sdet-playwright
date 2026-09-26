@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, devices, firefox } from '@playwright/test';
+import { chromium, defineConfig, devices, firefox } from '@playwright/test';
 
 
 
@@ -9,16 +9,19 @@ import { defineConfig, devices, firefox } from '@playwright/test';
 const config = {
   testDir: './tests',
   timeout: 40_000,
+
   expect: {
-    timeout: 40*1000
+
+    timeout: 5000
   },
+
   reporter: 'html',
   resultsDir: './test-results',
 
   use: {
-    browserName: 'chromium',
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    browserName: "chromium",
+    // headless: false,
+    
   },
 };
 
