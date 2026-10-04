@@ -2,6 +2,8 @@ const {test, expect, selectors} = require('@playwright/test');
 const { sign } = require('node:crypto');
 const { CONNREFUSED } = require('node:dns');
 
+// FOR PRACTICE APPS GO TO https://rahulshettyacademy.com/practice
+
 // IF ID IS PRESENT
 // USE CSS -> TAGNAME#ID (INPUT#USERNAME)
 
@@ -217,40 +219,12 @@ test('handling child windows',async ({browser})=>
     await page.pause();
 });
 
-// ----------------------------
-// CODE DOWNLOADED FROM TEACHER
-// ----------------------------
-
-// test('@Child windows hadl', async ({browser})=>
-//  {
-//     const context = await browser.newContext();
-//     const page =  await context.newPage();
-//     const userName = page.locator('#username');
-//     await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
-//     const documentLink = page.locator("[href*='documents-request']");
-
-//     const [newPage]=await Promise.all(
-//    [
-//       context.waitForEvent('page'),//listen for any new page pending,rejected,fulfilled
-//       documentLink.click(),
-   
-//    ])//new page is opened
-   
-
-//    const  text = await newPage.locator(".red").textContent();
-//     const arrayText = text.split("@")
-//     const domain =  arrayText[1].split(" ")[0]
-//     //console.log(domain);
-//     await page.locator("#username").fill(domain);
-//     console.log(await page.locator("#username").inputValue());
-
-//  })
 
 
-test.only('Dynanically find element',async ({browser})=>
+test('Dynanically find element',async ({page})=>
 {
-    const context = await browser.newContext();
-    const page = await context.newPage();
+    // const context = await browser.newContext();
+    // const page = await context.newPage();
     await page.goto("https://rahulshettyacademy.com/client");
     await expect(page).toHaveTitle("Let's Shop");
 
@@ -317,10 +291,14 @@ test.only('Dynanically find element',async ({browser})=>
     const dropDownCountry = page.locator("[placeholder='Select Country']");
     await dropDownCountry.pressSequentially("IND");
 
-    // ONCE IT SHOWS THE OPTIONS, SELECT THE ONE YOU WANT. EXACT TRUE MAKES SURE TO TAKE THE EXACT STRING
-    const selectCountry = await page.getByText("Indonesia", { exact: true });
-    // await selectCountry.waitFor({ state: "visible" });   
-    await selectCountry.click();
+    // ONCE IT SHOWS THE OPTIONS, SELECT THE ONE YOU WANT. 
+    // EXACT TRUE MAKES SURE TO TAKE THE EXACT STRING
+    // const selectCountry = page.getByText("Indonesia", { exact: true });
+    // await selectCountry.waitFor({ state: "visible" });  
+    
+    // THIS IS A BETTER WAY TO SELECT THE COUNTRY USING ROLE AND NAME
+    await page.locator(".ta-results").getByRole("button", { name: "Indonesia" }).click();
+    // await selectCountry.click();
 
     // CLICK TO PLACE ORDER AND VALIDATE ORDER IS PLACED
     await page.getByText("Place Order ").click();
@@ -334,73 +312,106 @@ test.only('Dynanically find element',async ({browser})=>
     await page.pause();
 });
 
-// -------------------------------------------
-// TEACHER CODE BELOW, NOT USED IN CLASS
-// -------------------------------------------
+// ----------------------------------
+// HOW TO DEBUG YOUR CODE USING PAUSE
+// ----------------------------------
 
-// const { test, expect } = require('@playwright/test');
+test('Debug code',async ({page})=>
+{
+    await page.goto("https://www.google.com");
+    await expect(page).toHaveTitle("Google");
 
-// test('@Webst Client App login', async ({ page }) => {
-//    //js file- Login js, DashboardPage
-//    const email = "anshika@gmail.com";
-//    const productName = 'ZARA COAT 3';
-//    const products = page.locator(".card-body");
-//    await page.goto("https://rahulshettyacademy.com/client");
-//    await page.locator("#userEmail").fill(email);
-//    await page.locator("#userPassword").fill("Iamking@000");
-//    await page.locator("[value='Login']").click();
-//    await page.waitForLoadState('networkidle');
-//    await page.locator(".card-body b").first().waitFor();
-//    const titles = await page.locator(".card-body b").allTextContents();
-//    console.log(titles); 
-//    const count = await products.count();
-//    for (let i = 0; i < count; ++i) {
-//       if (await products.nth(i).locator("b").textContent() === productName) {
-//          //add to cart
-//          await products.nth(i).locator("text= Add To Cart").click();
-//          break;
-//       }
-//    }
+    // YOU CAN USE page.pause() TO PAUSE THE TEST AND INSPECT ELEMENTS ON THE PAGE
+    await page.pause();
 
-//    await page.locator("[routerlink*='cart']").click();
-//    //await page.pause();
+    // YOU CAN ALSO USE page.screenshot() TO TAKE A SCREENSHOT OF THE PAGE
+    await page.screenshot({path: 'screenshot.png', fullPage: true});
 
-//    await page.locator("div li").first().waitFor();
-//    const bool = await page.locator("h3:has-text('ZARA COAT 3')").isVisible();
-//    expect(bool).toBeTruthy();
-//    await page.locator("text=Checkout").click();
+    // YOU CAN ALSO USE page.video() TO RECORD A VIDEO OF THE TEST
+    // await page.video().startRecording({path: 'video.mp4'});
 
-//    await page.locator("[placeholder*='Country']").pressSequentially("ind", { delay: 150 });
-//    const dropdown = page.locator(".ta-results");
-//    await dropdown.waitFor();
-//    const optionsCount = await dropdown.locator("button").count();
-//    for (let i = 0; i < optionsCount; ++i) {
-//       const text = await dropdown.locator("button").nth(i).textContent();
-//       if (text === " India") {
-//          await dropdown.locator("button").nth(i).click();
-//          break;
-//       }
-//    }
+    // YOU CAN ALSO USE page.console() TO LOG MESSAGES TO THE CONSOLE
+    page.on('console', msg => console.log(msg.text()));
 
-//    expect(page.locator(".user__name [type='text']").first()).toHaveText(email);
-//    await page.locator(".action__submit").click();
-//    await expect(page.locator(".hero-primary")).toHaveText(" Thankyou for the order. ");
-//    const orderId = await page.locator(".em-spacer-1 .ng-star-inserted").textContent();
-//    console.log(orderId);
+    // YOU CAN ALSO USE page.on('dialog') TO HANDLE ALERTS, CONFIRMATIONS, AND PROMPTS
+    page.on('dialog', async dialog => {
+        console.log(dialog.message());
+        await dialog.dismiss();
+    });
 
-//    await page.locator("button[routerlink*='myorders']").click();
-//    await page.locator("tbody").waitFor();
-//    const rows = await page.locator("tbody tr");
+    // YOU CAN ALSO USE page.on('request') TO LOG NETWORK REQUESTS
+    page.on('request', request => {
+        console.log('>>', request.method(), request.url());
+    });
 
+    // YOU CAN ALSO USE page.on('response') TO LOG NETWORK RESPONSES
+    page.on('response', response => {
+        console.log('<<', response.status(), response.url());
+    });
 
-//    for (let i = 0; i < await rows.count(); ++i) {
-//       const rowOrderId = await rows.nth(i).locator("th").textContent();
-//       if (orderId.includes(rowOrderId)) {
-//          await rows.nth(i).locator("button").first().click();
-//          break;
-//       }
-//    }
-//    const orderIdDetails = await page.locator(".col-text").textContent();
-//    expect(orderId.includes(orderIdDetails)).toBeTruthy();
+    // YOU CAN ALSO USE page.on('requestfailed') TO LOG FAILED NETWORK REQUESTS
+    page.on('requestfailed', request => {
+        console.log('!!', request.failure().errorText, request.url());
+    });
 
-// });
+    // YOU CAN ALSO USE page.on('requestfinished') TO LOG FINISHED NETWORK REQUESTS
+    page.on('requestfinished', request => {
+        console.log('**', request.method(), request.url());
+    });
+
+    // YOU CAN ALSO USE page.on('frameattached') TO LOG ATTACHED FRAMES
+    page.on('frameattached', frame => {
+        console.log('++', frame.url());
+    });
+    
+    // YOU CAN ALSO USE page.on('framedetached') TO LOG DETACHED FRAMES
+    page.on('framedetached', frame => {
+        console.log('--', frame.url());
+    });
+
+    // YOU CAN RUN THE TEST IN DEBUG MODE USING THE FOLLOWING COMMAND
+    // -----> npx playwright test --debug
+    // THIS WILL OPEN THE PLAYWRIGHT DEBUGGER AND ALLOW YOU TO STEP THROUGH THE TEST,
+    // INSPECT ELEMENTS, AND RUN COMMANDS IN THE CONSOLE.
+
+    // INSIDE THE DEBUGGER, YOU CAN GO LINE BY LINE, STEP INTO FUNCTIONS, 
+    // AND INSPECT VARIABLES. YOU CAN ALSO USE THE CONSOLE TO EXECUTE JAVASCRIPT IN THE 
+    // CONTEXT OF THE PAGE.
+
+    // ALSO, IN THE DEBUGGER, YOU CAN USE THE "Selectors" PANEL TO TEST SELECTORS 
+    // AND SEE WHICH ELEMENTS THEY MATCH.
+
+    // THE DEBUGGER CAN GIVE YOU THE UNIQUE SELECTOR FOR AN ELEMENT, 
+    // WHICH YOU CAN THEN USE IN YOUR TESTS.
+
+});
+
+// ----------------------------------
+// HOW TO USE CODEGEN TO GENERATE CODE FOR YOUR TESTS
+// ----------------------------------
+
+test('Codegen test',async ({browser})=>
+{
+    // YOU CAN USE THE FOLLOWING COMMAND TO GENERATE CODE FOR YOUR TESTS
+    // -----> npx playwright codegen https://rahulshettyacademy.com/loginpagePractise/
+    // THIS WILL OPEN A BROWSER AND RECORD YOUR ACTIONS, 
+    // AND GENERATE CODE IN THE CONSOLE.
+
+    // YOU CAN THEN COPY THE GENERATED CODE AND USE IT IN YOUR TESTS.
+
+    // NOTE: CODEGEN IS A GREAT WAY TO LEARN HOW TO WRITE SELECTORS AND INTERACT WITH ELEMENTS,
+    // BUT IT'S IMPORTANT TO CLEAN UP THE GENERATED CODE AND MAKE IT MORE READABLE AND MAINTAINABLE.
+
+    // YOU CAN USE THE BUILT IN ASSERT TEXT IN CODEGEN TO ASSERT THAT CERTAIN TEXT IS PRESENT 
+    // ON THE PAGE.
+    // THERE ARE 4 WAYS TO ASSERT TEXT IN CODEGEN:
+    // 1. assertText - Asserts that the text is present on the page.
+    // 2. assertValue - Asserts that the value of an input field is as expected.
+    // 3. assertVisible - Asserts that an element is visible on the page.
+    // 4. assertSnapshot - Asserts that the screenshot of an element matches the expected screenshot.
+
+    // TO ASSERT TITLE, YOU CAN USE THE FOLLOWING COMMAND IN CODEGEN:
+    // await expect(page).toHaveTitle("LoginPage Practise | Rahul Shetty Academy");
+
+});
+
