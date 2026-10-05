@@ -390,8 +390,8 @@ test('Debug code',async ({page})=>
 // HOW TO USE CODEGEN TO GENERATE CODE FOR YOUR TESTS
 // ----------------------------------
 
-test('Codegen test',async ({browser})=>
-{
+// test('Codegen test',async ({browser})=>
+// {
     // YOU CAN USE THE FOLLOWING COMMAND TO GENERATE CODE FOR YOUR TESTS
     // -----> npx playwright codegen https://rahulshettyacademy.com/loginpagePractise/
     // THIS WILL OPEN A BROWSER AND RECORD YOUR ACTIONS, 
@@ -413,5 +413,86 @@ test('Codegen test',async ({browser})=>
     // TO ASSERT TITLE, YOU CAN USE THE FOLLOWING COMMAND IN CODEGEN:
     // await expect(page).toHaveTitle("LoginPage Practise | Rahul Shetty Academy");
 
+// });
+
+test("test when elements in hidden", async ({page}) => {
+    await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
+    await expect(page).toHaveTitle("Practice Page");
+
+    // NAVIGATE PAGE LIKE THIS
+    // await page.goback();
+    // await page.goForward();
+
+    // ASSERT THAT THE ELEMENT IS VISIBLE, THEN CLICK HIDE BUTTON AND ASSERT THAT IT IS HIDDEN
+    const hideButton = page.locator("#displayed-text");
+    await expect(hideButton).toBeVisible();
+
+    // CLICK HIDE BUTTON AND ASSERT THAT IT IS HIDDEN
+    await page.locator("#hide-textbox").click();
+    await expect(hideButton).toBeHidden();
+
+
+    // 
 });
 
+
+test("handle java popup", async ({page}) => {
+    await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
+    await expect(page).toHaveTitle("Practice Page");
+
+    // THIS IS HOW WE HANDLE THE JAVA OR ALERT POPUPS
+    // 1. PLAYWRIGHT STATIS LISTENING FOR A DIALOG
+    // 2. THEN YOU CLICK THE BUTTON TO LAUNCH THE POPUP
+    // 3. THE DIALOG/ALERT BOX APPEARS
+    // 4. PLAYWRIGHT ACCEPTS IT OR DISMISSES IT 
+
+    const confButtom = page.locator("#confirmbtn");
+    // THIS WILL ACCEPT THE DIALOG POPUP
+    await page.once("dialog",dialog => dialog.accept());
+    await confButtom.click();
+    
+    // THIS WILL DISMISS THE DIALOG POPUP
+    await page.once("dialog", dialog => dialog.dismiss())
+    await confButtom.click();
+    
+    // LETS TRY ALERT BUTTON
+    const alertButton = page.locator("#alertbtn");
+    await alertButton.click();
+
+});
+
+
+test("MOUSE HOVER", async ({page}) => {
+    await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
+    await expect(page).toHaveTitle("Practice Page");
+
+    // HOVER ON AN ELEMENT
+    const mouseHover = page.locator("#mousehover");
+    await mouseHover.hover();
+
+    // CLICK ON ELEMENT INSIDE THE HOVER BUTTON OPTIONS
+    const topHoverButton = page.getByRole("link", {name: "Top"});
+    await topHoverButton.click()
+
+});
+
+test.only("how to handle frames in playwright", async ({page}) => {
+    await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
+    await expect(page).toHaveTitle("Practice Page");
+
+    // WE NEED TO SWITCH FROM MAIN FRAME TO CHILD FRAME
+    // PLAYWRIGHT NEEDS TO BE EXPLICITLY TOLD TO SWITCH FRAME TO ACCESS 
+
+    // THIS CODE WILL GIVE YOU A NEW PAGE OBJECT
+    const framePage = await page.frameLocator("#courses-iframe");
+
+    // TO ACCESS THE FRAME INFORMATION YOU USE THE NEWLY CONSTRUCTED PAGE
+    await framePage.getByRole("link", {name: "All Access plan"}).click()
+
+    // GET TEXT FROM H2 
+    const textNumber = await framePage.locator(".text h2").innerText();
+    const subscribers = textNumber.split(" ")[1];
+    console.log("Subscribers:", subscribers);
+    // await page.waitForTimeout(3000);
+
+});
