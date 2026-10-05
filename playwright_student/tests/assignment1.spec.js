@@ -65,7 +65,7 @@
 const { test, expect } = require('@playwright/test');
 const BASE_URL      = 'https://eventhub.rahulshettyacademy.com'
 
-test.only('User can book an event and see it in My Bookings', async ({ browser }) => {
+test('User can book an event and see it in My Bookings', async ({ browser }) => {
     // ------------------------
     // Step 1 — Login
     // ------------------------
