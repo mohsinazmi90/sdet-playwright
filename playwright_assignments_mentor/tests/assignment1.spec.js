@@ -40,6 +40,7 @@ test('test 2: validate password', async ({ page }) => {
 
     await expect(page.locator("#password")).toBeVisible();
     await expect(page.url()).toContain("/login");
+    // await expect(page).toHaveURL(/\/login/);
     await expect(page.getByText("Sign in to EventHub")).toBeVisible();
 
 
