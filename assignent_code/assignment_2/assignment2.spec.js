@@ -46,8 +46,3 @@ test("test with another context", async ({ browser }) => {
     await context.close()
 
 });
-
-// The `page` fixture gives you one ready-to-use browser page for the test. 
-// A browser context is a separate browser session that can contain one or more pages. 
-// Each new context starts with isolated state, so cookies, local storage, and 
-// login sessions are not shared with other contexts.
