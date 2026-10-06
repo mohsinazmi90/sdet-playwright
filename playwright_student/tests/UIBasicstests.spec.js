@@ -476,7 +476,7 @@ test("MOUSE HOVER", async ({page}) => {
 
 });
 
-test.only("how to handle frames in playwright", async ({page}) => {
+test("how to handle frames in playwright", async ({page}) => {
     await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
     await expect(page).toHaveTitle("Practice Page");
 
