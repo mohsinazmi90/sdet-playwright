@@ -25,7 +25,7 @@ const BASE_URL = "https://eventhub.rahulshettyacademy.com"
 // It provides features like `test()`, `expect()`, hooks, retries, and reports.
 // For normal automation testing projects, `@playwright/test` is usually the better choice.
 
-test.only('test 1: open the eventhub login page', async ({ browser }) => {
+test('test 1: open the eventhub login page', async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(`${BASE_URL}` + "/login");
