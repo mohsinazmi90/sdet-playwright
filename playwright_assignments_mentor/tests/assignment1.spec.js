@@ -28,7 +28,7 @@ const BASE_URL = "https://eventhub.rahulshettyacademy.com"
 test.only('test 1: open the eventhub login page', async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto(`${BASE_URL}` + "/events");
+    await page.goto(`${BASE_URL}` + "/login");
 
     await expect(page.getByText("Sign in to EventHub")).toBeVisible();
     await expect(page.locator("input[placeholder='you@email.com']")).toBeVisible();
