@@ -20,7 +20,7 @@ const { test, expect } = require('@playwright/test');
 const { text } = require('node:stream/consumers');
 const BASEURL = "https://eventhub.rahulshettyacademy.com";
 
-test.only("assignmment3. test", async ({ browser }) => {
+test("assignmment3. test", async ({ browser }) => {
 
     // Sign in and open the Events page from Browse Events.
     const context = await browser.newContext();
