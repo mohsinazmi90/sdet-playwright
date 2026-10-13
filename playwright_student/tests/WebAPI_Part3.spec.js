@@ -21,7 +21,7 @@ test.beforeAll(async () =>
 
 });
 
-test.only("this is api practice", async ({ browser }) => {
+test("this is api practice", async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
     // USES PLAYWRIGHT PAGE.ADDINITSCRIPT TO INJECT THE TOKEN VALUE INTO THE LOCAL 

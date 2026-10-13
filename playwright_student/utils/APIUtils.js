@@ -4,6 +4,7 @@ class APIUtils
         this.apiContext = apiContext;
         this.loginPayload = loginPayload
     }
+    
 
     async getToken(){
         const loginResponse = this.apiContext.post("https://rahulshettyacademy.com/api/ecom/auth/login", 
@@ -20,7 +21,7 @@ class APIUtils
     async createOrder(orderPayload){
         let response = {}
         response.token = await this.getToken()
-        const orderResponse = this.apiContext.post("https://rahulshettyacademy.com/api/ecom/order/create-order", {
+        const orderResponse = await this.apiContext.post("https://rahulshettyacademy.com/api/ecom/order/create-order", {
                 data:orderPayload,
                 headers: {
                     'Authorization': response.token,
@@ -28,9 +29,9 @@ class APIUtils
                 }
             })
         
-            const orderResponseJson = (await orderResponse).json()
-            const orderID = (await orderResponseJson).orders[0];
-            response.orderID = orderID
+            const orderResponseJson = await orderResponse.json();
+            const orderID = orderResponseJson.orders[0];
+            response.orderID = orderID;
             return response;
     }
 }
