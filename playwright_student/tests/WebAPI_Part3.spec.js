@@ -2,7 +2,6 @@
 
 const { test, expect, request } = require('@playwright/test');
 const { APIUtils } = require('../utils/APIUtils');
-const { log } = require('node:console');
 let response;
 const BASEURL = "https://rahulshettyacademy.com/client/"
 const loginPayload = {userEmail:"contact199@rahulshetty.com",userPassword:"Learning123"};

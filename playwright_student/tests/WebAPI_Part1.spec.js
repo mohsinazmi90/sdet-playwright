@@ -64,6 +64,7 @@ test("second: place order using api", async ({ page }) => {
     token = await apiUtils.getToken(userData);
 
     orderID = await apiUtils.createOrder(orderPayload);
+    
 
     await page.addInitScript(value => {
         window.localStorage.setItem('token', value);
@@ -73,7 +74,7 @@ test("second: place order using api", async ({ page }) => {
         "https://rahulshettyacademy.com/client/#/dashboard/myorders"
     );
 
-    await expect(page.getByText(orderID)).toBeVisible();
+    await expect(page.getByText(orderID.orderID)).toBeVisible();
 });
 
 // ---------------------------------------
